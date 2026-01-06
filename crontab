@@ -1,0 +1,6 @@
+# Cấu hình Cronjob
+# Dòng dưới có nghĩa: Chạy vào phút 0, giờ 1 (UTC), mọi ngày, mọi tháng, vào Chủ Nhật (0)
+# 1h sáng UTC = 8h sáng Việt Nam
+0 1 * * 0 root cd /app && python3 cap_nhat_xoa_da_thanh_toan.py >> /app/cron.log 2>&1
+
+# Dòng trống bắt buộc ở cuối file

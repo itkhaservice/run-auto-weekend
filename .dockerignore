@@ -1,9 +1,0 @@
-.git
-.venv
-.idea
-__pycache__
-ms-playwright
-build
-dist
-*.log
-tmp

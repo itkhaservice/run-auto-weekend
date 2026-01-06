@@ -20,6 +20,15 @@ logging.basicConfig(
     ]
 )
 
+# MÃ MÀU CHO GITHUB ACTIONS (ANSI CODES)
+class Colors:
+    RESET = "\033[0m"
+    BOLD = "\033[1m"
+    BLUE = "\033[1;34m"   # Xanh lam đậm
+    GREEN = "\033[1;32m"  # Xanh lá đậm
+    RED = "\033[1;31m"    # Đỏ đậm
+
+
 def get_previous_month(month_str):
     """Chuyển đổi chuỗi MM/YYYY thành đối tượng datetime và lùi lại 1 tháng."""
     try:
@@ -38,7 +47,7 @@ def process_single_project(project_name, project_idx, start_month_str):
     Hàm xử lý trọn gói cho 1 dự án duy nhất.
     Mở browser -> Login -> Xử lý -> Đóng browser tự động (khi hết with).
     """
-    logging.info(f"--- BẮT ĐẦU XỬ LÝ DỰ ÁN [{project_idx}]: {project_name} ---")
+    logging.info(f"{Colors.BLUE}--- BẮT ĐẦU XỬ LÝ DỰ ÁN [{project_idx}]: {project_name} ---{Colors.RESET}")
     
     with sync_playwright() as p:
         # Cấu hình Browser cho GitHub Actions (Server)
@@ -199,7 +208,7 @@ def process_single_project(project_name, project_idx, start_month_str):
                                         page.wait_for_load_state("networkidle", timeout=5000)
                                     except:
                                         page.wait_for_timeout(4000)
-                                    logging.info(f"[{project_idx}] - XÓA THÀNH CÔNG tháng {current_month_str}")
+                                    logging.info(f"[{project_idx}] - {Colors.RED}XÓA THÀNH CÔNG{Colors.RESET} tháng {current_month_str}")
                                 else:
                                     logging.error(f"[{project_idx}] - Không thấy nút Xác nhận xóa.")
                             else:
@@ -220,7 +229,7 @@ def process_single_project(project_name, project_idx, start_month_str):
         finally:
             # BƯỚC QUAN TRỌNG NHẤT: Đóng Browser để giải phóng RAM
             browser.close()
-            logging.info(f"--- Đã đóng Browser cho dự án {project_name} ---\n")
+            logging.info(f"{Colors.GREEN}--- Đã hoàn thành và đóng Browser cho dự án {project_name} ---{Colors.RESET}\n")
 
 def main_orchestrator():
     """Hàm điều phối chính: Đọc Excel và gọi xử lý từng dự án"""

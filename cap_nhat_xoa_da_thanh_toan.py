@@ -41,13 +41,15 @@ def process_single_project(project_name, project_idx, start_month_str):
     logging.info(f"--- BẮT ĐẦU XỬ LÝ DỰ ÁN [{project_idx}]: {project_name} ---")
     
     with sync_playwright() as p:
-        # Cấu hình Browser sạch sẽ cho mỗi dự án
+        # Cấu hình Browser cho GitHub Actions (Server)
+        # headless=True: Chạy ẩn
+        # Viewport cố định 1920x1080: Giả lập màn hình Desktop chuẩn để tránh lỗi Responsive
         browser = p.chromium.launch(
-            headless=True, # Đặt True khi chạy trên GitHub
+            headless=True,
             args=['--no-sandbox', '--disable-setuid-sandbox']
         )
         
-        # Tạo Context với Viewport Full HD để tránh lỗi Responsive
+        # Ép độ phân giải Full HD (Quan trọng hơn start-maximized khi chạy headless)
         context = browser.new_context(viewport={'width': 1920, 'height': 1080})
         page = context.new_page()
 
@@ -79,6 +81,21 @@ def process_single_project(project_name, project_idx, start_month_str):
             # 3. CHUYỂN ĐẾN TRANG BÁO PHÍ
             page.locator("//a[@href='/fee-reports']").click()
             page.wait_for_load_state("networkidle")
+
+            # Mở Filter để tìm tháng Đã thanh toán cũ nhất
+            filter_btn = page.locator(
+                "xpath=//*[@id='root']/div[2]/main/div/div/div[1]/div/span/div/div[2]/div/button[2]")
+            if filter_btn.is_visible():
+                filter_btn.click()
+                page.wait_for_timeout(500)
+
+                # Set điều kiện lọc
+                page.locator("xpath=//*[@id='demo-simple-select-helper']").click()
+                page.locator("xpath=//*[@data-value='1']").click()  # Đã thanh toán
+                page.keyboard.press("Escape")
+
+                # Chờ load dữ liệu sau lọc
+                page.wait_for_timeout(3000)
 
             # --- TÌM THÁNG CŨ NHẤT ---
             thangcunhat = "01/2000"

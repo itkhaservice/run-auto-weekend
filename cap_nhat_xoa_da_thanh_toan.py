@@ -172,7 +172,12 @@ def test_xoa_du_lieu_bao_phi_da_thanh_toan(page: Page):
 
                         if confirm_delete_button.is_visible():
                             confirm_delete_button.click()
-                            page.wait_for_timeout(3000)
+                            # Chờ mạng xử lý xong request xóa (QUAN TRỌNG)
+                            try:
+                                page.wait_for_load_state("networkidle", timeout=5000)
+                            except:
+                                page.wait_for_timeout(5000)
+                            
                             logging.info(f"[{idx}] - Đã XÓA thành công dữ liệu tháng {current_month_str}")
                         else:
                             logging.error(f"[{idx}] - LỖI: Không tìm thấy nút XÁC NHẬN XÓA.")
@@ -216,8 +221,16 @@ if __name__ == "__main__":
     logging.info(">>> BẮT ĐẦU TOOL TỰ ĐỘNG XÓA DỮ LIỆU ĐÃ THANH TOÁN (DOCKER VERSION) <<<")
     
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True, args=['--no-sandbox', '--disable-setuid-sandbox'])
-        page = browser.new_page()
+        # CẤU HÌNH CHO SERVER (GITHUB ACTIONS)
+        # 1. Headless = True (Bắt buộc vì server không có màn hình)
+        # 2. Viewport = 1920x1080 (Quan trọng: Ép giao diện hiển thị như Desktop để nút bấm không bị chạy)
+        browser = p.chromium.launch(
+            headless=True,
+            args=['--no-sandbox', '--disable-setuid-sandbox']
+        )
+        # Tạo context với độ phân giải màn hình Full HD
+        context = browser.new_context(viewport={'width': 1920, 'height': 1080})
+        page = context.new_page()
         
         try:
             test_xoa_du_lieu_bao_phi_da_thanh_toan(page)

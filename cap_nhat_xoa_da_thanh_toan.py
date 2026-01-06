@@ -30,15 +30,17 @@ def test_xoa_du_lieu_bao_phi_da_thanh_toan(page: Page):
         return
 
     # Load dữ liệu
-    project_df = pd.read_excel(excel_path, sheet_name="BaoCao1", header=None)
+    project_df = pd.read_excel(excel_path, sheet_name="BaoCao", header=None)
     project_list = project_df.iloc[1:, 0].tolist()
     wb = load_workbook(excel_path)
     ws = wb["BaoCao1"]
 
     # 🌟 LẤY THÁNG HIỆN TẠI ĐỂ BẮT ĐẦU VÒNG LẶP
-    # Định dạng MM/YYYY
-    # start_month_str = datetime.now().strftime("%m/%Y")
-    start_month_str = datetime.now().strftime("10/2025")
+    # Yêu cầu: Xóa từ tháng thứ 3 về trước so với hiện tại
+    # Ví dụ: Hiện tại 01/2026 -> Start = 10/2025
+    now = pd.Timestamp.now()
+    start_date = now - pd.DateOffset(months=3)
+    start_month_str = start_date.strftime("%m/%Y")
     logging.error(f"Tháng bắt đầu vòng lặp: {start_month_str}")
 
     # 1. ĐĂNG NHẬP

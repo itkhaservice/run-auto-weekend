@@ -172,7 +172,8 @@ def process_single_project(project_name, project_idx, start_month_str):
                 except ValueError:
                     break
 
-                logging.info(f"[{project_idx}] - Đang xử lý tháng: {current_month_str}")
+                # Bắt đầu xây dựng nội dung log cho tháng này
+                status_msg = f"[{project_idx}] - Tháng {current_month_str}: "
 
                 try:
                     # Mở Filter
@@ -196,7 +197,7 @@ def process_single_project(project_name, project_idx, start_month_str):
                         checkbox_all = page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[2]/table/thead/tr/th[1]/span/input")
                         
                         if checkbox_all.is_visible():
-                            logging.info(f"[{project_idx}] - Tìm thấy dữ liệu tháng {current_month_str}. Đang xóa...")
+                            status_msg += "Đang xóa... "
                             checkbox_all.click()
                             page.wait_for_timeout(2000) # Chờ nút xóa hiện
                             
@@ -209,21 +210,22 @@ def process_single_project(project_name, project_idx, start_month_str):
                                 confirm_btn = page.locator("xpath=//button[@type='submit']")
                                 if confirm_btn.is_visible():
                                     confirm_btn.click()
-                                    # Chờ request xóa xong (quan trọng)
                                     try:
                                         page.wait_for_load_state("networkidle", timeout=5000)
                                     except:
                                         page.wait_for_timeout(4000)
-                                    logging.info(f"[{project_idx}] - {Colors.RED}XÓA THÀNH CÔNG{Colors.RESET} tháng {current_month_str}")
+                                    status_msg += f"{Colors.RED}XÓA THÀNH CÔNG{Colors.RESET}"
                                 else:
-                                    logging.error(f"[{project_idx}] - Không thấy nút Xác nhận xóa.")
+                                    status_msg += "Lỗi (Không thấy nút Xác nhận)"
                             else:
-                                logging.info(f"[{project_idx}] - Không thấy nút Xóa (có thể dữ liệu đã sạch). Bỏ qua.")
+                                status_msg += "Không tìm thấy nút Xóa... Bỏ qua"
                         else:
-                            logging.info(f"[{project_idx}] - Không có dữ liệu để xóa tháng {current_month_str}.")
+                            status_msg += "Không có dữ liệu."
+                    
+                    logging.info(status_msg)
                     
                 except Exception as inner_e:
-                    logging.error(f"[{project_idx}] - Lỗi thao tác tháng {current_month_str}: {inner_e}")
+                    logging.error(f"[{project_idx}] - Lỗi tháng {current_month_str}: {inner_e}")
 
                 # Lùi tháng
                 current_month_str = get_previous_month(current_month_str)

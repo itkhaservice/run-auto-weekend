@@ -115,7 +115,10 @@ def process_single_project(project_name, project_idx, start_month_str):
 
                 logging.info(f"[{project_idx}] - Đã Pre-Filter trạng thái 'Đã thanh toán'.")
                 # Chờ load dữ liệu sau lọc
-                page.wait_for_timeout(3000)
+                try:
+                    page.wait_for_load_state("networkidle", timeout=5000)
+                except: pass
+                page.wait_for_timeout(6000)
             except Exception as e:
                 logging.warning(f"[{project_idx}] - Pre-Filter chưa hoàn tất: {e}")
 
@@ -185,7 +188,10 @@ def process_single_project(project_name, project_idx, start_month_str):
                         page.keyboard.press("Escape")
                         
                         # Chờ load dữ liệu sau lọc
-                        page.wait_for_timeout(3000)
+                        try:
+                            page.wait_for_load_state("networkidle", timeout=5000)
+                        except: pass
+                        page.wait_for_timeout(6000)
                         
                         checkbox_all = page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[2]/table/thead/tr/th[1]/span/input")
                         

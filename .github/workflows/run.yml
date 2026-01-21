@@ -9,6 +9,8 @@ on:
 jobs:
   run-script:
     runs-on: ubuntu-latest
+    env:
+      PYTHONUNBUFFERED: 1
 
     steps:
       - name: Checkout code
@@ -24,6 +26,21 @@ jobs:
           pip install -r requirements.txt
           playwright install --with-deps chromium
 
-      - name: Run Playwright script
+      - name: Run Report Data Script
+        run: |
+          pytest du_lieu_bao_cao.py
+
+      - name: Run Delete Paid Fees Script
+        if: always()
         run: |
           python cap_nhat_xoa_da_thanh_toan.py
+
+      - name: Upload Log & Debug Screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: execution-artifacts
+          path: |
+            run.log
+            *.png
+          retention-days: 30

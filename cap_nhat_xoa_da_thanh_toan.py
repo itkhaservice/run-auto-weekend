@@ -47,6 +47,10 @@ def process_single_project(project_name, project_idx, start_month_str):
     Hàm xử lý trọn gói cho 1 dự án duy nhất.
     Mở browser -> Login -> Xử lý -> Đóng browser tự động (khi hết with).
     """
+    if str(project_name).strip().upper() == "CHUNG CƯ SEN HỒNG BC":
+        logging.info(f"{Colors.BLUE}--- BỎ QUA DỰ ÁN [{project_idx}]: {project_name} (Theo yêu cầu) ---{Colors.RESET}")
+        return
+
     logging.info(f"{Colors.BLUE}--- BẮT ĐẦU XỬ LÝ DỰ ÁN [{project_idx}]: {project_name} ---{Colors.RESET}")
     
     with sync_playwright() as p:

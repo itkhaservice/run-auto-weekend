@@ -217,6 +217,9 @@ def test_z_summary_report():
     # Đọc lại file Excel để lấy dữ liệu mới nhất
     df = pd.read_excel(excel_path, sheet_name="BaoCao")
     
+    # Chỉ lấy 9 cột đầu tiên (từ index 0 đến 8)
+    df = df.iloc[:, :9]
+    
     # Chuyển đổi dữ liệu thành bảng Markdown
     # headers='keys' lấy dòng đầu tiên làm tiêu đề
     table = tabulate(df, headers='keys', tablefmt='github', showindex=False)

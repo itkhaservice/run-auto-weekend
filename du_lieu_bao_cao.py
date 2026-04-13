@@ -68,7 +68,7 @@ def test_lay_thong_tin_du_an(page: Page):
     project_df = pd.read_excel(excel_path, sheet_name="BaoCao2", header=None)
     project_list = project_df.iloc[1:, 0].tolist()
     wb = load_workbook(excel_path)
-    ws = wb["BaoCao"]
+    ws = wb["BaoCao2"]
     login(page)
     
     for idx, project_val in enumerate(project_list, start=2):
@@ -95,7 +95,7 @@ def test_lay_so_luong_bai_viet(page: Page):
     project_df = pd.read_excel(excel_path, sheet_name="BaoCao2", header=None)
     project_list = project_df.iloc[1:, 0].tolist()
     wb = load_workbook(excel_path)
-    ws = wb["BaoCao"]
+    ws = wb["BaoCao2"]
     login(page)
     
     for idx, project_val in enumerate(project_list, start=2):
@@ -140,7 +140,7 @@ def test_lay_thong_tin_bai_viet_ngay_cuoi(page: Page):
     project_df = pd.read_excel(excel_path, sheet_name="BaoCao2", header=None)
     project_list = project_df.iloc[1:, 0].tolist()
     wb = load_workbook(excel_path)
-    ws = wb["BaoCao"]
+    ws = wb["BaoCao2"]
     login(page)
     
     for idx, project_val in enumerate(project_list, start=2):
@@ -189,7 +189,7 @@ def test_lay_thong_tin_bao_phi_moi_nhat(page: Page):
     project_df = pd.read_excel(excel_path, sheet_name="BaoCao2", header=None)
     project_list = project_df.iloc[1:, 0].tolist()
     wb = load_workbook(excel_path)
-    ws = wb["BaoCao"]
+    ws = wb["BaoCao2"]
     login(page)
     
     for idx, project_val in enumerate(project_list, start=2):

@@ -9,6 +9,8 @@ on:
 jobs:
   run-script:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # Cho phép push code lên repo
     env:
       PYTHONUNBUFFERED: 1
 
@@ -34,6 +36,15 @@ jobs:
         if: always()
         run: |
           python cap_nhat_xoa_da_thanh_toan.py
+
+      - name: Commit and Push Report Data
+        if: always()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data.xlsx report.json
+          git commit -m "chore: update report data [skip ci]" || echo "No changes to commit"
+          git push
 
       - name: Upload Log & Debug Screenshots
         if: always()

@@ -220,8 +220,13 @@ def test_z_summary_report():
     # Chỉ lấy 9 cột đầu tiên (từ index 0 đến 8)
     df = df.iloc[:, :9]
     
+    # --- XUẤT RA JSON ---
+    json_path = os.path.join(BASE_DIR, "report.json")
+    # orient='records' giúp tạo cấu trúc mảng các object [{col1: val1, col2: val2}, ...]
+    df.to_json(json_path, orient='records', force_ascii=False, indent=4)
+    print(f"   -> Đã xuất dữ liệu ra: {json_path}")
+
     # Chuyển đổi dữ liệu thành bảng Markdown
-    # headers='keys' lấy dòng đầu tiên làm tiêu đề
     table = tabulate(df, headers='keys', tablefmt='github', showindex=False)
     
     output = f"## 📊 Báo Cáo Tổng Hợp Dữ Liệu\n"

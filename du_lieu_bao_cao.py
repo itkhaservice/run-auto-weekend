@@ -198,18 +198,22 @@ def test_lay_thong_tin_bao_phi_moi_nhat(page: Page):
             select_project(page, project_val)
             
             page.goto("https://qlvh.khaservice.com.vn/fee-reports")
-            tbody_xpath = "//*[@id='root']/div[2]/main/div/div/div[2]/table/tbody"
+            
+            # TỐI ƯU: Đợi hàng dữ liệu đầu tiên (tr[1]) xuất hiện
+            # Đây là dấu hiệu chắc chắn nhất là dữ liệu đã nạp xong
+            target_xpath = '//*[@id="root"]/div[2]/main/div/div/div[2]/table/tbody/tr[1]/td[5]/div'
             try:
-                page.wait_for_selector(f"xpath={tbody_xpath}", timeout=15000)
+                page.wait_for_selector(f"xpath={target_xpath}", state="visible", timeout=15000)
             except: pass
 
-            loc = page.locator('xpath=//*[@id="root"]/div[2]/main/div/div/div[2]/table/tbody/tr[1]/td[5]/div')
-            if loc.is_visible(timeout=5000):
+            loc = page.locator(f"xpath={target_xpath}")
+            if loc.is_visible():
                 text = loc.text_content().strip()
                 ws[f"I{idx}"] = text
                 print(f"   -> Phí mới nhất: {text}")
             else:
                 ws[f"I{idx}"] = "N/A"
+                print(f"   -> Không tìm thấy dữ liệu phí.")
         except Exception as e:
             print(f"Lỗi Fee {project_val}: {e}")
 

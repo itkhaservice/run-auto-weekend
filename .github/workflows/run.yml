@@ -39,6 +39,7 @@ jobs:
           git config --global user.email "it@khaservice.com.vn"
           git add data.xlsx report.json || echo "No report files to add"
           git commit -m "chore: update report data [skip ci]" || echo "No changes to commit"
+          git pull --rebase origin main
           git push
 
       - name: Run Delete Paid Fees & Trash Script
@@ -51,6 +52,7 @@ jobs:
         run: |
           git add cleanup_results.json || echo "No cleanup logs to add"
           git commit -m "chore: update cleanup logs [skip ci]" || echo "No changes to commit"
+          git pull --rebase origin main
           git push
 
       - name: Upload Log & Debug Screenshots

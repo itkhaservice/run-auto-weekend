@@ -82,10 +82,24 @@ def test_lay_so_luong_bai_viet(page: Page):
     for idx, project_val in enumerate(project_list, start=2):
         try:
             print(f"[{idx}] Đang lấy Posts: {project_val}")
-            page.locator("#combo-box-demo").click()
-            page.locator("#combo-box-demo").fill(str(project_val))
-            page.locator("#combo-box-demo-option-0").click()
-            page.wait_for_timeout(1000)
+            # TỐI ƯU CHỌN DỰ ÁN: Xóa cũ, điền mới và đợi option
+            combo = page.locator("#combo-box-demo")
+            combo.click()
+            # Xóa sạch nội dung cũ bằng cách chọn tất cả và xóa
+            page.keyboard.press("Control+A")
+            page.keyboard.press("Backspace")
+            combo.fill(str(project_val))
+            
+            # Đợi option đầu tiên xuất hiện thực sự
+            try:
+                option0 = page.locator("#combo-box-demo-option-0")
+                option0.wait_for(state="visible", timeout=10000)
+                option0.click()
+            except:
+                # Nếu không thấy option, thử nhấn Enter để xác nhận
+                page.keyboard.press("Enter")
+            
+            page.wait_for_timeout(2000) # Chờ context dự án nạp xong
 
             # --- TIN TỨC ---
             page.goto("https://qlvh.khaservice.com.vn/posts/news")

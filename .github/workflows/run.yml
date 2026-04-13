@@ -35,8 +35,8 @@ jobs:
       - name: Push Report Data (Public JSON)
         if: always()
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "itkhaservice"
+          git config --global user.email "it@khaservice.com.vn"
           git add data.xlsx report.json || echo "No report files to add"
           git commit -m "chore: update report data [skip ci]" || echo "No changes to commit"
           git push

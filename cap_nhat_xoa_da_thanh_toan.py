@@ -25,16 +25,17 @@ def save_json_log():
 def empty_trash_module(page: Page, project_idx, url, label):
     """
     Hàm dùng chung để dọn dẹp thùng rác cho các module.
-    Trả về số đợt (batches) đã xóa.
+    Đã tối ưu hóa tốc độ load dữ liệu lớn.
     """
     logging.info(f"[{project_idx}] - --- ĐANG DỌN DẸP: {label} ---")
     batches_count = 0
     try:
         page.goto(f"https://qlvh.khaservice.com.vn{url}")
-        page.wait_for_load_state("networkidle")
-        page.wait_for_timeout(2000)
-
+        # Đợi bảng hoặc thông báo trống xuất hiện
+        page.wait_for_selector("xpath=//*[@id='root']/div[2]/main/div/div/div[2]/table", timeout=30000)
+        
         while True:
+            # Kiểm tra nhanh số lượng checkbox hiện có
             checkbox_list = page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[2]/table//input[@type='checkbox']")
             count = checkbox_list.count()
 
@@ -45,27 +46,43 @@ def empty_trash_module(page: Page, project_idx, url, label):
             batches_count += 1
             logging.info(f"[{project_idx}] - Tìm thấy {count - 1} dòng. Đợt xóa {batches_count}...")
 
-            # 2. Chọn hiển thị 1000 dòng cho nhanh
-            try:
-                page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[3]/div/div[2]/button").click()
-                page.locator("xpath=//*[@id='menu-apartment-list-style1']/div[3]/ul/li[6]").click()
-                page.wait_for_timeout(3000) # Chờ lâu hơn một chút để 1000 dòng load xong
-            except: pass
+            # 2. Chọn hiển thị 1000 dòng (Chỉ thực hiện ở đợt đầu tiên để tiết kiệm thời gian)
+            if batches_count == 1:
+                try:
+                    page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[3]/div/div[2]/button").click()
+                    page.locator("xpath=//*[@id='menu-apartment-list-style1']/div[3]/ul/li[6]").click()
+                    # Đợi bảng cập nhật lại số dòng (đợi mạng rảnh hoặc bảng hiển thị đủ)
+                    page.wait_for_load_state("networkidle")
+                    page.wait_for_timeout(1000) # Nghỉ ngắn 1s cho chắc chắn UI cập nhật
+                except: pass
 
+            # 3. Bấm chọn tất cả các dòng
             page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[2]/table/thead/tr/th[1]/span/input").click()
-            page.wait_for_timeout(1000)
-
+            
+            # 4. Bấm nút Xóa tất cả các dòng đã chọn
             delete_all_btn = page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[2]/div[2]/div/div[3]/button")
+            # Đợi nút xóa hiện ra thực sự trước khi click
+            delete_all_btn.wait_for(state="visible", timeout=5000)
+            
             if delete_all_btn.is_visible():
                 delete_all_btn.click()
-                page.wait_for_timeout(1000)
-                confirm_btn = page.locator("xpath=/html/body/div[2]/div[3]/div/div[2]/button[2]")
-                if confirm_btn.is_visible():
-                    confirm_btn.click()
-                    page.wait_for_load_state("networkidle")
-                    page.wait_for_timeout(5000)
-                else: break
-            else: break
+                
+                # 5. Bấm nút Đồng ý (Xác nhận xóa)
+                confirm_xpath = "/html/body/div[2]/div[3]/div/div[2]/button[2]"
+                page.wait_for_selector(f"xpath={confirm_xpath}", state="visible", timeout=5000)
+                page.locator(f"xpath={confirm_xpath}").click()
+                
+                logging.info(f"[{project_idx}] - Đã gửi lệnh xóa đợt {batches_count}. Đang đợi nạp lại dữ liệu...")
+                
+                # TỐI ƯU: Đợi bảng nạp lại xong thay vì nghỉ 5s
+                page.wait_for_load_state("networkidle")
+                # Đợi cho đến khi checkbox "Chọn tất cả" có thể click được trở lại (dấu hiệu bảng đã load xong)
+                try:
+                    page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[2]/table/thead/tr/th[1]/span/input").wait_for(state="visible", timeout=10000)
+                except: pass
+                page.wait_for_timeout(1000) # Nghỉ 1s đệm cuối cùng cho server ổn định
+            else:
+                break
         return {"status": "Completed", "batches": batches_count}
     except Exception as e:
         logging.error(f"[{project_idx}] - Lỗi dọn dẹp {label}: {e}")

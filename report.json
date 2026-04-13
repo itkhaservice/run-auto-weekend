@@ -7,8 +7,8 @@
         "Tổng số cư dân":0,
         "Tin tức":1,
         "Thông báo":1,
-        "Ngày mới nhất":null,
-        "Unnamed: 8":null
+        "Ngày mới nhất":"N\/A",
+        "Báo phí":"N\/A"
     },
     {
         "Dự án":"CHUNG CƯ TOPAZ HOME 2 - BLOCK B",
@@ -19,7 +19,7 @@
         "Tin tức":19,
         "Thông báo":12,
         "Ngày mới nhất":"24\/02\/2026",
-        "Unnamed: 8":null
+        "Báo phí":"N\/A"
     },
     {
         "Dự án":"CHUNG CƯ TOPAZ ELITE PHOENIX 1",
@@ -30,6 +30,6 @@
         "Tin tức":84,
         "Thông báo":67,
         "Ngày mới nhất":"11\/04\/2026",
-        "Unnamed: 8":null
+        "Báo phí":"N\/A"
     }
 ]

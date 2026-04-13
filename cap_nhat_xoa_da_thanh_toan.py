@@ -78,15 +78,24 @@ def empty_trash_module(page: Page, project_idx, url, label):
                 page.wait_for_timeout(3000)
                 
                 # TỐI ƯU: Đợi cho đến khi bảng nạp lại và số lượng checkbox trở về 1 (trống)
-                # Thử kiểm tra trong tối đa 60 giây cho các đợt xóa lớn
+                # ĐỒNG THỜI xuất hiện dòng thông báo "Không có dữ liệu" (thẻ p)
                 start_wait = time.time()
-                while time.time() - start_wait < 60:
+                while time.time() - start_wait < 90: # Tăng thời gian chờ lên 90s cho các dự án cực lớn
                     page.wait_for_load_state("networkidle")
+                    
+                    # 1. Kiểm tra checkbox
                     current_count = page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[2]/table//input[@type='checkbox']").count()
-                    if current_count <= 1:
-                        logging.info(f"[{project_idx}] - Đã dọn sạch đợt {batches_count}. (Checkbox: {current_count})")
+                    
+                    # 2. Kiểm tra dòng thông báo "Không có dữ liệu" (thẻ p)
+                    empty_msg_xpath = "//*[@id='root']/div[2]/main/div/div/div[2]/table/tbody/tr/td/div/p"
+                    empty_msg_count = page.locator(f"xpath={empty_msg_xpath}").count()
+                    
+                    if current_count <= 1 and empty_msg_count == 1:
+                        logging.info(f"[{project_idx}] - Đã dọn sạch đợt {batches_count}. (Xác nhận bảng trống thành công)")
                         break
-                    page.wait_for_timeout(2000) # Kiểm tra lại sau mỗi 2s
+                    
+                    logging.info(f"[{project_idx}] - Đang đợi server phản hồi... (Checkbox: {current_count}, Msg: {empty_msg_count})")
+                    page.wait_for_timeout(3000) # Kiểm tra lại sau mỗi 3s
                 
                 page.wait_for_timeout(1000) # Nghỉ đệm cuối đợt
             else:

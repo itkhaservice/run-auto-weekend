@@ -65,7 +65,7 @@ def select_project(page: Page, project_name):
 # --- 1. LẤY OVERVIEW (Cột B, C, D, E) ---
 def test_lay_thong_tin_du_an(page: Page):
     excel_path = os.path.join(BASE_DIR, "data.xlsx")
-    project_df = pd.read_excel(excel_path, sheet_name="BaoCao", header=None)
+    project_df = pd.read_excel(excel_path, sheet_name="BaoCao2", header=None)
     project_list = project_df.iloc[1:, 0].tolist()
     wb = load_workbook(excel_path)
     ws = wb["BaoCao"]
@@ -92,7 +92,7 @@ def test_lay_thong_tin_du_an(page: Page):
 # --- 2. LẤY SỐ LƯỢNG BÀI VIẾT (Cột F, G) ---
 def test_lay_so_luong_bai_viet(page: Page):
     excel_path = os.path.join(BASE_DIR, "data.xlsx")
-    project_df = pd.read_excel(excel_path, sheet_name="BaoCao", header=None)
+    project_df = pd.read_excel(excel_path, sheet_name="BaoCao2", header=None)
     project_list = project_df.iloc[1:, 0].tolist()
     wb = load_workbook(excel_path)
     ws = wb["BaoCao"]
@@ -137,7 +137,7 @@ def test_lay_so_luong_bai_viet(page: Page):
 # --- 3. LẤY NGÀY BÀI VIẾT CUỐI (Cột H) ---
 def test_lay_thong_tin_bai_viet_ngay_cuoi(page: Page):
     excel_path = os.path.join(BASE_DIR, "data.xlsx")
-    project_df = pd.read_excel(excel_path, sheet_name="BaoCao", header=None)
+    project_df = pd.read_excel(excel_path, sheet_name="BaoCao2", header=None)
     project_list = project_df.iloc[1:, 0].tolist()
     wb = load_workbook(excel_path)
     ws = wb["BaoCao"]
@@ -186,7 +186,7 @@ def test_lay_thong_tin_bai_viet_ngay_cuoi(page: Page):
 # --- 4. LẤY BÁO PHÍ MỚI NHẤT (Cột I) ---
 def test_lay_thong_tin_bao_phi_moi_nhat(page: Page):
     excel_path = os.path.join(BASE_DIR, "data.xlsx")
-    project_df = pd.read_excel(excel_path, sheet_name="BaoCao", header=None)
+    project_df = pd.read_excel(excel_path, sheet_name="BaoCao2", header=None)
     project_list = project_df.iloc[1:, 0].tolist()
     wb = load_workbook(excel_path)
     ws = wb["BaoCao"]
@@ -219,7 +219,7 @@ def test_lay_thong_tin_bao_phi_moi_nhat(page: Page):
 def test_z_summary_report():
     excel_path = os.path.join(BASE_DIR, "data.xlsx")
     if not os.path.exists(excel_path): return
-    df = pd.read_excel(excel_path, sheet_name="BaoCao")
+    df = pd.read_excel(excel_path, sheet_name="BaoCao2")
     df = df.iloc[:, :9]
     
     json_path = os.path.join(BASE_DIR, "report.json")

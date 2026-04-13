@@ -219,8 +219,15 @@ def test_lay_thong_tin_bao_phi_moi_nhat(page: Page):
 def test_z_summary_report():
     excel_path = os.path.join(BASE_DIR, "data.xlsx")
     if not os.path.exists(excel_path): return
-    df = pd.read_excel(excel_path, sheet_name="BaoCao2")
+    df = pd.read_excel(excel_path, sheet_name="BaoCao2", keep_default_na=False)
     df = df.iloc[:, :9]
+    
+    # Đặt lại tên cột
+    df.columns = [
+        "Dự án", "Tổng căn hộ", "Tổng cư dân sử dụng APP", 
+        "Tổng số căn hộ sử dụng APP", "Tổng số cư dân", 
+        "Tin tức", "Thông báo", "Ngày mới nhất", "Báo phí"
+    ]
     
     json_path = os.path.join(BASE_DIR, "report.json")
     df.to_json(json_path, orient='records', force_ascii=False, indent=4)

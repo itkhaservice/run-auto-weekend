@@ -1,32 +1,35 @@
 [
     {
         "Dự án":"CHUNG CƯ KHÁNH HỘI 1",
-        "Tổng căn hộ":330,
+        "Tổng căn hộ":0,
         "Tổng cư dân sử dụng APP":0,
-        "Tổng số căn hộ sử dụng APP":1,
-        "Tổng số cư dân":1,
+        "Tổng số căn hộ sử dụng APP":0,
+        "Tổng số cư dân":0,
         "Tin tức":1,
         "Thông báo":1,
-        "Ngày mới nhất":"Không có dữ liệu"
+        "Ngày mới nhất":null,
+        "Unnamed: 8":null
     },
     {
         "Dự án":"CHUNG CƯ TOPAZ HOME 2 - BLOCK B",
         "Tổng căn hộ":603,
-        "Tổng cư dân sử dụng APP":496,
-        "Tổng số căn hộ sử dụng APP":134,
-        "Tổng số cư dân":128,
-        "Tin tức":9,
-        "Thông báo":6,
-        "Ngày mới nhất":"20\/09\/2025"
+        "Tổng cư dân sử dụng APP":497,
+        "Tổng số căn hộ sử dụng APP":148,
+        "Tổng số cư dân":143,
+        "Tin tức":19,
+        "Thông báo":12,
+        "Ngày mới nhất":"24\/02\/2026",
+        "Unnamed: 8":null
     },
     {
         "Dự án":"CHUNG CƯ TOPAZ ELITE PHOENIX 1",
         "Tổng căn hộ":621,
-        "Tổng cư dân sử dụng APP":604,
-        "Tổng số căn hộ sử dụng APP":356,
-        "Tổng số cư dân":304,
-        "Tin tức":10,
-        "Thông báo":10,
-        "Ngày mới nhất":"16\/09\/2025"
+        "Tổng cư dân sử dụng APP":630,
+        "Tổng số căn hộ sử dụng APP":395,
+        "Tổng số cư dân":323,
+        "Tin tức":84,
+        "Thông báo":67,
+        "Ngày mới nhất":"11\/04\/2026",
+        "Unnamed: 8":null
     }
 ]

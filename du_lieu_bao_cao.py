@@ -124,40 +124,63 @@ def set_max_rows(page: Page):
     except Exception as e:
         print(f"   [!] Lỗi khi chọn 1000 dòng: {e}")
 
+
 # --- 2. LẤY SỐ LƯỢNG BÀI VIẾT (Cột F, G) ---
 def test_lay_so_luong_bai_viet(page: Page):
     excel_path = os.path.join(BASE_DIR, "data.xlsx")
     project_df = pd.read_excel(excel_path, sheet_name="BaoCao", header=None)
     project_list = project_df.iloc[1:, 0].tolist()
     wb = load_workbook(excel_path)
-    ws = wb["BaoCao2"]
+    ws = wb["BaoCao"]
     login(page)
-    
+
     for idx, project_val in enumerate(project_list, start=2):
         try:
             print(f"[{idx}] Đang lấy Posts: {project_val}")
-            select_project(page, project_val)
+            page.locator("#combo-box-demo").click()
+            page.locator("#combo-box-demo").fill(str(project_val))
+            page.locator("#combo-box-demo-option-0").click()
+            page.wait_for_timeout(1000)
 
             # --- TIN TỨC ---
             page.goto("https://qlvh.khaservice.com.vn/posts/news")
             page.wait_for_load_state("networkidle")
-            set_max_rows(page)
-            
+
+            # Chọn 1000 dòng
+            try:
+                page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[3]/div/div[2]/button").click()
+                page.locator("xpath=//*[@id='menu-apartment-list-style1']/div[3]/ul/li[6]").click()
+                print("   -> Đã chọn hiển thị 1000 dòng tin tức...")
+                page.wait_for_timeout(5000)  # Chờ 5s để bảng load lại
+            except:
+                print("   -> Không chọn được dropdown 1000 dòng")
+
             count_news = page.locator('//*[@id="root"]/div[2]/main/div/div/div[2]/table/tbody/tr').count()
             ws[f"F{idx}"] = count_news
+            print(f"   -> Tin tức: {count_news}")
 
             # --- THÔNG BÁO ---
             page.goto("https://qlvh.khaservice.com.vn/posts/notification")
             page.wait_for_load_state("networkidle")
-            set_max_rows(page)
+
+            # Chọn 1000 dòng
+            try:
+                page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[3]/div/div[2]/button").click()
+                page.locator("xpath=//*[@id='menu-apartment-list-style1']/div[3]/ul/li[6]").click()
+                print("   -> Đã chọn hiển thị 1000 dòng tin tức...")
+                page.wait_for_timeout(5000)  # Chờ 5s để bảng load lại
+            except:
+                print("   -> Không chọn được dropdown 1000 dòng")
 
             count_notif = page.locator('//*[@id="root"]/div[2]/main/div/div/div[2]/table/tbody/tr').count()
             ws[f"G{idx}"] = count_notif
+            print(f"   -> Thông báo: {count_notif}")
 
         except Exception as e:
             print(f"Lỗi Posts {project_val}: {e}")
-            
+
     wb.save(excel_path)
+
 
 # --- 3. LẤY NGÀY BÀI VIẾT CUỐI (Cột H) ---
 def test_lay_thong_tin_bai_viet_ngay_cuoi(page: Page):
@@ -165,28 +188,32 @@ def test_lay_thong_tin_bai_viet_ngay_cuoi(page: Page):
     project_df = pd.read_excel(excel_path, sheet_name="BaoCao", header=None)
     project_list = project_df.iloc[1:, 0].tolist()
     wb = load_workbook(excel_path)
-    ws = wb["BaoCao2"]
+    ws = wb["BaoCao"]
     login(page)
-    
+
     for idx, project_val in enumerate(project_list, start=2):
         try:
             print(f"[{idx}] Đang lấy Ngày cuối: {project_val}")
-            select_project(page, project_val)
-            
+            page.locator("#combo-box-demo").click()
+            page.locator("#combo-box-demo").fill(str(project_val))
+            page.locator("#combo-box-demo-option-0").click()
+
             dates = []
-            
-            # Kiểm tra Thông báo
+
+            # Kiểm tra Thông báo (Lấy dòng đầu tiên)
             page.goto("https://qlvh.khaservice.com.vn/posts/notification")
             page.wait_for_load_state("networkidle")
             loc = page.locator('//*[@id="root"]/div[2]/main/div/div/div[2]/table/tbody/tr[1]/td[8]/div')
             if loc.is_visible():
                 text = loc.inner_text().strip()
+                # Xử lý chuỗi ngày (ví dụ: "12/01/2026 14:00" -> lấy "12/01/2026")
                 try:
                     date_str = text.split()[0]
                     dates.append(datetime.strptime(date_str, '%d/%m/%Y'))
-                except: pass
-            
-            # Kiểm tra Tin tức
+                except:
+                    pass
+
+            # Kiểm tra Tin tức (Lấy dòng đầu tiên)
             page.goto("https://qlvh.khaservice.com.vn/posts/news")
             page.wait_for_load_state("networkidle")
             loc = page.locator('//*[@id="root"]/div[2]/main/div/div/div[2]/table/tbody/tr[1]/td[8]/div')
@@ -195,17 +222,19 @@ def test_lay_thong_tin_bai_viet_ngay_cuoi(page: Page):
                 try:
                     date_str = text.split()[0]
                     dates.append(datetime.strptime(date_str, '%d/%m/%Y'))
-                except: pass
-            
+                except:
+                    pass
+
             if dates:
                 max_date = max(dates).strftime('%d/%m/%Y')
                 ws[f"H{idx}"] = max_date
+                print(f"   -> Ngày mới nhất: {max_date}")
             else:
                 ws[f"H{idx}"] = "N/A"
-                
+
         except Exception as e:
             print(f"Lỗi Date {project_val}: {e}")
-            
+
     wb.save(excel_path)
 
 # --- 4. LẤY BÁO PHÍ MỚI NHẤT (Cột I) ---
@@ -214,49 +243,25 @@ def test_lay_thong_tin_bao_phi_moi_nhat(page: Page):
     project_df = pd.read_excel(excel_path, sheet_name="BaoCao", header=None)
     project_list = project_df.iloc[1:, 0].tolist()
     wb = load_workbook(excel_path)
-    ws = wb["BaoCao2"]
+    ws = wb["BaoCao"]
     login(page)
-    
+
     for idx, project_val in enumerate(project_list, start=2):
         try:
             print(f"[{idx}] Đang lấy Fee Report: {project_val}")
-            select_project(page, project_val)
-            
-            # Đảm bảo chuyển trang sau khi context dự án đã ổn định
-            page.goto("https://qlvh.khaservice.com.vn/fee-reports")
-            page.wait_for_load_state("networkidle", timeout=20000)
-            
-            # Sử dụng selector linh hoạt: Tìm td thứ 5 trong hàng đầu tiên của tbody
-            # Selector này ít bị ảnh hưởng bởi các thẻ div bọc bên trong
-            cell_selector = "table tbody tr:first-child td:nth-child(5)"
-            
-            # Thử đợi dữ liệu xuất hiện trong tối đa 20 giây
-            found_data = False
-            for retry in range(3): # Thử lại 3 lần nếu thấy trang trắng
-                try:
-                    page.wait_for_selector(cell_selector, state="visible", timeout=7000)
-                    loc = page.locator(cell_selector)
-                    text = loc.inner_text().strip()
-                    
-                    if text and text != "":
-                        ws[f"I{idx}"] = text
-                        print(f"   -> Phí mới nhất: {text}")
-                        found_data = True
-                        break
-                except:
-                    print(f"   [!] Thử lại lần {retry+1} cho {project_val}...")
-                    page.reload()
-                    page.wait_for_load_state("networkidle")
+            page.locator("#combo-box-demo").click()
+            page.locator("#combo-box-demo").fill(str(project_val))
+            page.locator("#combo-box-demo-option-0").click()
+            page.wait_for_timeout(1000)
 
-            if not found_data:
-                # Kiểm tra xem có phải do 'Không có dữ liệu' thực sự không
-                if "không có dữ liệu" in page.content().lower():
-                    ws[f"I{idx}"] = "N/A (No Data)"
-                    print("   -> Hệ thống báo: Không có dữ liệu.")
-                else:
-                    ws[f"I{idx}"] = "N/A (Timeout)"
-                    print("   -> Lỗi: Không load được bảng dữ liệu.")
-                    
+            page.goto("https://qlvh.khaservice.com.vn/fee-reports")
+            page.wait_for_load_state("networkidle")
+
+            loc = page.locator('//*[@id="root"]/div[2]/main/div/div/div[2]/table/tbody/tr[1]/td[5]/div')
+            if loc.is_visible():
+                text = loc.text_content().strip()
+                ws[f"I{idx}"] = text
+                print(f"   -> Phí mới nhất: {text}")
         except Exception as e:
             print(f"Lỗi Fee {project_val}: {e}")
 

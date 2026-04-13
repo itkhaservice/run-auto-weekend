@@ -194,16 +194,25 @@ def test_lay_thong_tin_bao_phi_moi_nhat(page: Page):
             page.locator("#combo-box-demo").click()
             page.locator("#combo-box-demo").fill(str(project_val))
             page.locator("#combo-box-demo-option-0").click()
-            page.wait_for_timeout(1000)
-
-            page.goto("https://qlvh.khaservice.com.vn/fee-reports")
-            page.wait_for_load_state("networkidle")
             
-            loc = page.locator('//*[@id="root"]/div[2]/main/div/div/div[2]/table/tbody/tr[1]/td[5]/div')
-            if loc.is_visible():
+            # Thay thế wait cố định bằng việc chờ dữ liệu bảng load xong
+            page.goto("https://qlvh.khaservice.com.vn/fee-reports")
+            
+            # Đợi bảng dữ liệu xuất hiện (tbody)
+            tbody_xpath = "//*[@id='root']/div[2]/main/div/div/div[2]/table/tbody"
+            try:
+                page.wait_for_selector(f"xpath={tbody_xpath}", timeout=15000)
+            except: pass
+
+            loc = page.locator('xpath=//*[@id="root"]/div[2]/main/div/div/div[2]/table/tbody/tr[1]/td[5]/div')
+            # Đợi cụ thể ô dữ liệu đầu tiên hiện ra (tránh lấy nhầm lúc trang đang nạp)
+            if loc.is_visible(timeout=5000):
                 text = loc.text_content().strip()
                 ws[f"I{idx}"] = text
                 print(f"   -> Phí mới nhất: {text}")
+            else:
+                ws[f"I{idx}"] = "N/A (Chưa nạp)"
+                print(f"   -> Không thấy dữ liệu phí.")
         except Exception as e:
             print(f"Lỗi Fee {project_val}: {e}")
 

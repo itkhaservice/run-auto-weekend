@@ -45,10 +45,11 @@ def empty_trash_module(page: Page, project_idx, url, label):
             batches_count += 1
             logging.info(f"[{project_idx}] - Tìm thấy {count - 1} dòng. Đợt xóa {batches_count}...")
 
+            # 2. Chọn hiển thị 1000 dòng cho nhanh
             try:
                 page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[3]/div/div[2]/button").click()
-                page.locator("xpath=//*[@id='menu-apartment-list-style1']/div[3]/ul/li[4]").click()
-                page.wait_for_timeout(2000)
+                page.locator("xpath=//*[@id='menu-apartment-list-style1']/div[3]/ul/li[6]").click()
+                page.wait_for_timeout(3000) # Chờ lâu hơn một chút để 1000 dòng load xong
             except: pass
 
             page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[2]/table/thead/tr/th[1]/span/input").click()

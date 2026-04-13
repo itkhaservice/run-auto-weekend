@@ -42,8 +42,8 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add data.xlsx report.json
-          git commit -m "chore: update report data [skip ci]" || echo "No changes to commit"
+          git add data.xlsx report.json cleanup_results.json
+          git commit -m "chore: update report and cleanup logs [skip ci]" || echo "No changes to commit"
           git push
 
       - name: Upload Log & Debug Screenshots

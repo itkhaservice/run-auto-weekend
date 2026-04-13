@@ -37,7 +37,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add data.xlsx report.json
+          git add data.xlsx report.json || echo "No report files to add"
           git commit -m "chore: update report data [skip ci]" || echo "No changes to commit"
           git push
 
@@ -49,7 +49,7 @@ jobs:
       - name: Push Cleanup Logs
         if: always()
         run: |
-          git add cleanup_results.json
+          git add cleanup_results.json || echo "No cleanup logs to add"
           git commit -m "chore: update cleanup logs [skip ci]" || echo "No changes to commit"
           git push
 

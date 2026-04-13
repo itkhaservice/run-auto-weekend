@@ -202,6 +202,10 @@ def process_single_project(project_name, project_idx, start_month_str):
 def main_orchestrator():
     excel_path = os.path.join(BASE_DIR, "data.xlsx")
     if not os.path.exists(excel_path): return
+    
+    # Khởi tạo file JSON trống ngay từ đầu để tránh lỗi GitHub Action
+    save_json_log()
+    
     now = pd.Timestamp.now()
     start_month_str = (now - pd.DateOffset(months=3)).strftime("%m/%Y")
     logging.info(f">>> TOOL STARTED. Start Month: {start_month_str} <<<")

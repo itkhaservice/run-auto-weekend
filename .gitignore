@@ -12,6 +12,8 @@ env/
 # --- Except these specific files (Allow list) ---
 !cap_nhat_xoa_da_thanh_toan.py
 !du_lieu_bao_cao.py
+!don_dep_thung_rac.py
+!xoa_bao_phi_cu.py
 
 # --- IDE & Editors ---
 .idea/

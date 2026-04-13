@@ -45,63 +45,54 @@ def get_previous_month(month_str):
 def empty_trash_module(page: Page, project_idx, url, label):
     """
     Hàm dùng chung để dọn dẹp thùng rác cho các module.
-    Logic: Vào trang -> Kiểm tra dữ liệu -> Chọn 100 dòng -> Xóa toàn bộ -> Lặp lại đến khi hết.
+    Sử dụng XPath chuẩn đã kiểm tra ổn định.
     """
     logging.info(f"[{project_idx}] - --- ĐANG DỌN DẸP: {label} ---")
     try:
         page.goto(f"https://qlvh.khaservice.com.vn{url}")
         page.wait_for_load_state("networkidle")
-        
+        page.wait_for_timeout(2000)
+
         while True:
-            # 1. Kiểm tra xem có checkbox nào không (đại diện cho có dữ liệu)
-            checkbox_all = page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[2]/table/thead/tr/th[1]/span/input")
-            
-            # Đợi một chút để dữ liệu load, nếu sau 5s không thấy checkbox thì coi như thùng rác trống
-            try:
-                checkbox_all.wait_for(state="visible", timeout=5000)
-            except:
-                logging.info(f"[{project_idx}] - Thùng rác {label} hiện tại đang trống.")
+            # 1. Kiểm tra sự tồn tại của checkbox và dòng dữ liệu
+            checkbox_list = page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[2]/table//input[@type='checkbox']")
+            count = checkbox_list.count()
+
+            if count <= 1:
+                logging.info(f"[{project_idx}] - Thùng rác {label} trống.")
                 break
-            
-            # 2. Nếu có dữ liệu, thử chọn hiển thị 100 dòng để xóa cho nhanh
+
+            logging.info(f"[{project_idx}] - Tìm thấy {count - 1} dòng. Đang tiến hành xóa...")
+
+            # 2. Chọn hiển thị 100 dòng
             try:
-                # Nút chọn số dòng (thường nằm ở footer trang)
-                page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[4]/div/div[2]/button").click()
-                # Chọn option '100' (thường là li cuối hoặc li có text 100)
-                option_100 = page.locator("xpath=//li[contains(text(), '100')]")
-                if option_100.is_visible():
-                    option_100.click()
-                    page.wait_for_timeout(2000)
+                page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[3]/div/div[2]/button").click()
+                page.locator("xpath=//*[@id='menu-apartment-list-style1']/div[3]/ul/li[4]").click()
+                page.wait_for_timeout(2000)
             except: pass
 
-            # 3. Bấm chọn tất cả
-            checkbox_all.click()
+            # 3. Bấm chọn tất cả các dòng
+            page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[2]/table/thead/tr/th[1]/span/input").click()
             page.wait_for_timeout(1000)
-            
-            # 4. Bấm nút Xóa (nút hiện ra sau khi chọn checkbox)
-            delete_btn = page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[2]/div[2]/div/div[2]/button")
-            if delete_btn.is_visible():
-                delete_btn.click()
+
+            # 4. Bấm nút Xóa tất cả các dòng đã chọn
+            delete_all_btn = page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[2]/div[2]/div/div[3]/button")
+            if delete_all_btn.is_visible():
+                delete_all_btn.click()
                 page.wait_for_timeout(1000)
-                
-                # 5. Xác nhận xóa
-                confirm_btn = page.locator("xpath=//button[@type='submit']")
+
+                # 5. Bấm nút Đồng ý (Xác nhận xóa)
+                confirm_btn = page.locator("xpath=/html/body/div[2]/div[3]/div/div[2]/button[2]")
                 if confirm_btn.is_visible():
                     confirm_btn.click()
-                    logging.info(f"[{project_idx}] - Đã xóa một đợt dữ liệu trong {label}...")
-                    # Chờ xử lý xóa xong
+                    logging.info(f"[{project_idx}] - Đã xóa xong 1 đợt dữ liệu...")
                     page.wait_for_load_state("networkidle")
-                    page.wait_for_timeout(3000)
-                else:
-                    logging.warning(f"[{project_idx}] - Không tìm thấy nút Xác nhận xóa ở {label}.")
-                    break
-            else:
-                logging.warning(f"[{project_idx}] - Không tìm thấy nút Xóa sau khi đã chọn tất cả ở {label}.")
-                break
-                
-    except Exception as e:
-        logging.error(f"[{project_idx}] - Lỗi khi dọn dẹp {label}: {e}")
+                    page.wait_for_timeout(5000)
+                else: break
+            else: break
 
+    except Exception as e:
+        logging.error(f"[{project_idx}] - Lỗi dọn dẹp {label}: {e}")
 def process_single_project(project_name, project_idx, start_month_str):
     """
     Hàm xử lý trọn gói cho 1 dự án duy nhất.

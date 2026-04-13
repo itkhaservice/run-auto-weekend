@@ -5,7 +5,6 @@ from openpyxl import load_workbook
 from datetime import datetime
 import logging
 import time
-
 import json
 
 # --- CẤU HÌNH ---
@@ -16,99 +15,92 @@ JSON_LOG_FILE = "cleanup_results.json"
 # Biến toàn cục để lưu kết quả chạy
 execution_results = []
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler(LOG_FILE, mode='w', encoding='utf-8')
+    ]
+)
+
+class Colors:
+    RESET = "\033[0m"
+    BOLD = "\033[1m"
+    BLUE = "\033[1;34m"
+    GREEN = "\033[1;32m"
+    RED = "\033[1;31m"
+
+def get_previous_month(month_str):
+    try:
+        date_obj = datetime.strptime(f"01/{month_str}", '%d/%m/%Y')
+        new_month = date_obj.month - 1
+        new_year = date_obj.year
+        if new_month == 0:
+            new_month = 12
+            new_year -= 1
+        return f"{new_month:02d}/{new_year}"
+    except ValueError: return None
+
 def save_json_log():
-    """Lưu danh sách kết quả vào file JSON"""
     with open(JSON_LOG_FILE, 'w', encoding='utf-8') as f:
         json.dump(execution_results, f, ensure_ascii=False, indent=4)
-    logging.info(f"--- ĐÃ CẬP NHẬT KẾT QUẢ VÀO FILE: {JSON_LOG_FILE} ---")
 
 def empty_trash_module(page: Page, project_idx, url, label):
-    """
-    Hàm dùng chung để dọn dẹp thùng rác cho các module.
-    Đã tối ưu hóa tốc độ load dữ liệu lớn.
-    """
     logging.info(f"[{project_idx}] - --- ĐANG DỌN DẸP: {label} ---")
     batches_count = 0
     try:
         page.goto(f"https://qlvh.khaservice.com.vn{url}")
-        # Đợi bảng hoặc thông báo trống xuất hiện
-        page.wait_for_selector("xpath=//*[@id='root']/div[2]/main/div/div/div[2]/table", timeout=30000)
+        page.wait_for_load_state("networkidle")
         
         while True:
-            # Kiểm tra nhanh số lượng checkbox hiện có
-            checkbox_list = page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[2]/table//input[@type='checkbox']")
-            count = checkbox_list.count()
+            # Điều kiện: Nếu số thẻ p trong bảng > 1 thì là vẫn còn dữ liệu
+            p_xpath = "//*[@id='root']/div[2]/main/div/div/div[2]/table/tbody/tr/td/div/p"
+            p_count = page.locator(f"xpath={p_xpath}").count()
 
-            if count <= 1:
-                logging.info(f"[{project_idx}] - Thùng rác {label} trống.")
+            if p_count <= 1:
+                logging.info(f"[{project_idx}] - Thùng rác {label} sạch.")
                 break
             
             batches_count += 1
-            logging.info(f"[{project_idx}] - Tìm thấy {count - 1} dòng. Đợt xóa {batches_count}...")
+            logging.info(f"[{project_idx}] - Phát hiện {p_count} dòng. Đợt xóa {batches_count}...")
 
-            # 2. Chọn hiển thị 1000 dòng (Chỉ thực hiện ở đợt đầu tiên để tiết kiệm thời gian)
-            if batches_count == 1:
-                try:
-                    page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[3]/div/div[2]/button").click()
-                    page.locator("xpath=//*[@id='menu-apartment-list-style1']/div[3]/ul/li[6]").click()
-                    # Đợi bảng cập nhật lại số dòng (đợi mạng rảnh hoặc bảng hiển thị đủ)
-                    page.wait_for_load_state("networkidle")
-                    page.wait_for_timeout(1000) # Nghỉ ngắn 1s cho chắc chắn UI cập nhật
-                except: pass
+            # 2. Chọn hiển thị 1000 dòng
+            try:
+                page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[3]/div/div[2]/button").click()
+                page.locator("xpath=//*[@id='menu-apartment-list-style1']/div[3]/ul/li[6]").click()
+                page.wait_for_timeout(3000)
+            except: pass
 
-            # 3. Bấm chọn tất cả các dòng
+            # 3. Chọn tất cả và xóa
             page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[2]/table/thead/tr/th[1]/span/input").click()
-            
-            # 4. Bấm nút Xóa tất cả các dòng đã chọn
+            page.wait_for_timeout(500)
+
             delete_all_btn = page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[2]/div[2]/div/div[3]/button")
-            # Đợi nút xóa hiện ra thực sự trước khi click
-            delete_all_btn.wait_for(state="visible", timeout=5000)
-            
             if delete_all_btn.is_visible():
                 delete_all_btn.click()
-                
-                # 5. Bấm nút Đồng ý (Xác nhận xóa)
-                confirm_xpath = "/html/body/div[2]/div[3]/div/div[2]/button[2]"
-                page.wait_for_selector(f"xpath={confirm_xpath}", state="visible", timeout=5000)
-                page.locator(f"xpath={confirm_xpath}").click()
-                
-                logging.info(f"[{project_idx}] - Đã gửi lệnh xóa đợt {batches_count}. Đang đợi hệ thống thực thi...")
-                
-                # Đợi 3 giây để hệ thống bắt đầu xử lý
-                page.wait_for_timeout(3000)
-                
-                # TỐI ƯU: Đợi cho đến khi bảng nạp lại và số lượng checkbox trở về 1 (trống)
-                # ĐỒNG THỜI xuất hiện dòng thông báo "Không có dữ liệu" (thẻ p)
-                start_wait = time.time()
-                while time.time() - start_wait < 90: # Tăng thời gian chờ lên 90s cho các dự án cực lớn
-                    page.wait_for_load_state("networkidle")
-                    
-                    # 1. Kiểm tra checkbox
-                    current_count = page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[2]/table//input[@type='checkbox']").count()
-                    
-                    # 2. Kiểm tra dòng thông báo "Không có dữ liệu" (thẻ p)
-                    empty_msg_xpath = "//*[@id='root']/div[2]/main/div/div/div[2]/table/tbody/tr/td/div/p"
-                    empty_msg_count = page.locator(f"xpath={empty_msg_xpath}").count()
-                    
-                    if current_count <= 1 and empty_msg_count == 1:
-                        logging.info(f"[{project_idx}] - Đã dọn sạch đợt {batches_count}. (Xác nhận bảng trống thành công)")
-                        break
-                    
-                    logging.info(f"[{project_idx}] - Đang đợi server phản hồi... (Checkbox: {current_count}, Msg: {empty_msg_count})")
-                    page.wait_for_timeout(3000) # Kiểm tra lại sau mỗi 3s
-                
-                page.wait_for_timeout(1000) # Nghỉ đệm cuối đợt
+                page.locator("xpath=/html/body/div[2]/div[3]/div/div[2]/button[2]").click()
+
+                logging.info(f"[{project_idx}] - Đã gửi lệnh xóa đợt {batches_count}. Đang đợi nạp lại giao diện...")
+
+                # Đợi giao diện nạp lại hoàn toàn
+                combobox_xpath = "//*[@id='root']/div[2]/main/div/div/div[3]/div/div[2]/button"
+                p_xpath = "//*[@id='root']/div[2]/main/div/div/div[2]/table/tbody/tr/td/div/p"
+                try:
+                    page.wait_for_selector(f"xpath={combobox_xpath}", state="visible", timeout=20000)
+                    page.wait_for_selector(f"xpath={p_xpath}", state="visible", timeout=20000)
+                except: pass
+
+                page.wait_for_timeout(1500) # Nghỉ đệm cho server ổn định
             else:
                 break
+
         return {"status": "Completed", "batches": batches_count}
     except Exception as e:
         logging.error(f"[{project_idx}] - Lỗi dọn dẹp {label}: {e}")
         return {"status": f"Error: {str(e)}", "batches": batches_count}
 
 def process_single_project(project_name, project_idx, start_month_str):
-    """
-    Hàm xử lý trọn gói cho 1 dự án duy nhất.
-    """
     project_result = {
         "project_name": project_name,
         "timestamp": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
@@ -146,7 +138,6 @@ def process_single_project(project_name, project_idx, start_month_str):
             page.locator("//a[@href='/fee-reports']").click()
             page.wait_for_load_state("networkidle")
 
-            # Lọc trạng thái "Đã thanh toán"
             try:
                 filter_btn = page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[1]/div/span/div/div[2]/div/button[2]")
                 filter_btn.click()
@@ -205,37 +196,23 @@ def process_single_project(project_name, project_idx, start_month_str):
         finally:
             browser.close()
             execution_results.append(project_result)
-            save_json_log() # Lưu JSON sau mỗi dự án để đảm bảo không mất dữ liệu
+            save_json_log()
             logging.info(f"{Colors.GREEN}--- Hoàn tất dự án {project_name} ---{Colors.RESET}\n")
 
 def main_orchestrator():
-    """Hàm điều phối chính: Đọc Excel và gọi xử lý từng dự án"""
     excel_path = os.path.join(BASE_DIR, "data.xlsx")
-    if not os.path.exists(excel_path):
-        logging.error("Không tìm thấy file data.xlsx")
-        return
-
-    # Tính toán tháng bắt đầu
+    if not os.path.exists(excel_path): return
     now = pd.Timestamp.now()
-    start_date = now - pd.DateOffset(months=3)
-    start_month_str = start_date.strftime("%m/%Y")
+    start_month_str = (now - pd.DateOffset(months=3)).strftime("%m/%Y")
     logging.info(f">>> TOOL STARTED. Start Month: {start_month_str} <<<")
-
     try:
         project_df = pd.read_excel(excel_path, sheet_name="BaoCao", header=None)
         project_list = project_df.iloc[1:, 0].tolist()
-        
-        logging.info(f"Tổng số dự án cần xử lý: {len(project_list)}")
-        
         for idx, project_val in enumerate(project_list, start=1):
-            # Gọi hàm xử lý riêng biệt cho từng dự án
             process_single_project(project_val, idx, start_month_str)
-            
-            # Nghỉ ngắn giữa các dự án để CPU server "thở"
             time.sleep(2)
-            
     except Exception as e:
-        logging.error(f"Lỗi khi đọc file Excel hoặc khởi tạo: {e}")
+        logging.error(f"Lỗi: {e}")
 
 if __name__ == "__main__":
     main_orchestrator()

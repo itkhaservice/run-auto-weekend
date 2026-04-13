@@ -1,0 +1,41 @@
+[
+    {
+        "project_name": "CHUNG CƯ KHÁNH HỘI 1",
+        "timestamp": "13/04/2026 05:32:16",
+        "fee_reports_cleaned": [],
+        "vehicle_trash": {
+            "status": "Completed",
+            "batches": 0
+        },
+        "fee_trash": {
+            "status": "Completed",
+            "batches": 0
+        }
+    },
+    {
+        "project_name": "CHUNG CƯ TOPAZ HOME 2 - BLOCK B",
+        "timestamp": "13/04/2026 05:33:14",
+        "fee_reports_cleaned": [],
+        "vehicle_trash": {
+            "status": "Completed",
+            "batches": 0
+        },
+        "fee_trash": {
+            "status": "Completed",
+            "batches": 0
+        }
+    },
+    {
+        "project_name": "CHUNG CƯ TOPAZ ELITE PHOENIX 1",
+        "timestamp": "13/04/2026 05:34:46",
+        "fee_reports_cleaned": [],
+        "vehicle_trash": {
+            "status": "Completed",
+            "batches": 0
+        },
+        "fee_trash": {
+            "status": "Completed",
+            "batches": 0
+        }
+    }
+]

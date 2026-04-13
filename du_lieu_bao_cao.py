@@ -18,7 +18,6 @@ else:
 @pytest.fixture(scope="session")
 def browser():
     with sync_playwright() as p:
-        # Chạy headless=True trên CI, False trên local để debug
         is_ci = os.environ.get("CI") == "true"
         browser = p.chromium.launch(
             headless=is_ci,
@@ -40,7 +39,28 @@ def login(page: Page):
         page.locator("input[name='email']").fill("admin@khaservice.com.vn")
         page.locator("input[name='password']").fill("Kha@@123")
         page.locator("button[type='submit']").click()
+        page.wait_for_load_state("networkidle")
         page.wait_for_timeout(2000)
+
+def select_project(page: Page, project_name):
+    """Hàm trợ giúp chọn dự án an toàn, tránh lỗi Timeout trên GitHub Actions"""
+    combo = page.locator("#combo-box-demo")
+    combo.click()
+    # Xóa sạch nội dung cũ trong ô tìm kiếm
+    page.keyboard.press("Control+A")
+    page.keyboard.press("Backspace")
+    combo.fill(str(project_name))
+    
+    try:
+        # Đợi option đầu tiên xuất hiện thực sự
+        option0 = page.locator("#combo-box-demo-option-0")
+        option0.wait_for(state="visible", timeout=10000)
+        option0.click()
+    except:
+        # Nếu lag không hiện dropdown, thử nhấn Enter
+        page.keyboard.press("Enter")
+    
+    page.wait_for_timeout(2000) # Chờ hệ thống nạp context dự án
 
 # --- 1. LẤY OVERVIEW (Cột B, C, D, E) ---
 def test_lay_thong_tin_du_an(page: Page):
@@ -54,9 +74,8 @@ def test_lay_thong_tin_du_an(page: Page):
     for idx, project_val in enumerate(project_list, start=2):
         try:
             print(f"[{idx}] Đang lấy Overview: {project_val}")
-            page.locator("#combo-box-demo").click()
-            page.locator("#combo-box-demo").fill(str(project_val))
-            page.locator("#combo-box-demo-option-0").click()
+            select_project(page, project_val)
+            
             page.locator("a[href='/statistics/overview']").click()
             page.wait_for_load_state("networkidle")
             page.wait_for_timeout(1000)
@@ -82,58 +101,33 @@ def test_lay_so_luong_bai_viet(page: Page):
     for idx, project_val in enumerate(project_list, start=2):
         try:
             print(f"[{idx}] Đang lấy Posts: {project_val}")
-            # TỐI ƯU CHỌN DỰ ÁN: Xóa cũ, điền mới và đợi option
-            combo = page.locator("#combo-box-demo")
-            combo.click()
-            # Xóa sạch nội dung cũ bằng cách chọn tất cả và xóa
-            page.keyboard.press("Control+A")
-            page.keyboard.press("Backspace")
-            combo.fill(str(project_val))
-            
-            # Đợi option đầu tiên xuất hiện thực sự
-            try:
-                option0 = page.locator("#combo-box-demo-option-0")
-                option0.wait_for(state="visible", timeout=10000)
-                option0.click()
-            except:
-                # Nếu không thấy option, thử nhấn Enter để xác nhận
-                page.keyboard.press("Enter")
-            
-            page.wait_for_timeout(2000) # Chờ context dự án nạp xong
+            select_project(page, project_val)
 
             # --- TIN TỨC ---
             page.goto("https://qlvh.khaservice.com.vn/posts/news")
             page.wait_for_load_state("networkidle")
             
-            # Chọn 1000 dòng
             try:
                 page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[3]/div/div[2]/button").click()    
                 page.locator("xpath=//*[@id='menu-apartment-list-style1']/div[3]/ul/li[6]").click()
-                print("   -> Đã chọn hiển thị 1000 dòng tin tức...")
-                page.wait_for_timeout(5000) # Chờ 5s để bảng load lại
-            except: 
-                print("   -> Không chọn được dropdown 1000 dòng")
+                page.wait_for_timeout(5000) 
+            except: pass
 
             count_news = page.locator('//*[@id="root"]/div[2]/main/div/div/div[2]/table/tbody/tr').count()
             ws[f"F{idx}"] = count_news
-            print(f"   -> Tin tức: {count_news}")
 
             # --- THÔNG BÁO ---
             page.goto("https://qlvh.khaservice.com.vn/posts/notification")
             page.wait_for_load_state("networkidle")
 
-            # Chọn 1000 dòng
             try:
                 page.locator("xpath=//*[@id='root']/div[2]/main/div/div/div[3]/div/div[2]/button").click()    
                 page.locator("xpath=//*[@id='menu-apartment-list-style1']/div[3]/ul/li[6]").click()
-                print("   -> Đã chọn hiển thị 1000 dòng tin tức...")
-                page.wait_for_timeout(5000) # Chờ 5s để bảng load lại
-            except:
-                print("   -> Không chọn được dropdown 1000 dòng")
+                page.wait_for_timeout(5000)
+            except: pass
 
             count_notif = page.locator('//*[@id="root"]/div[2]/main/div/div/div[2]/table/tbody/tr').count()
             ws[f"G{idx}"] = count_notif
-            print(f"   -> Thông báo: {count_notif}")
 
         except Exception as e:
             print(f"Lỗi Posts {project_val}: {e}")
@@ -152,25 +146,22 @@ def test_lay_thong_tin_bai_viet_ngay_cuoi(page: Page):
     for idx, project_val in enumerate(project_list, start=2):
         try:
             print(f"[{idx}] Đang lấy Ngày cuối: {project_val}")
-            page.locator("#combo-box-demo").click()
-            page.locator("#combo-box-demo").fill(str(project_val))
-            page.locator("#combo-box-demo-option-0").click()
+            select_project(page, project_val)
             
             dates = []
             
-            # Kiểm tra Thông báo (Lấy dòng đầu tiên)
+            # Kiểm tra Thông báo
             page.goto("https://qlvh.khaservice.com.vn/posts/notification")
             page.wait_for_load_state("networkidle")
             loc = page.locator('//*[@id="root"]/div[2]/main/div/div/div[2]/table/tbody/tr[1]/td[8]/div')
             if loc.is_visible():
                 text = loc.inner_text().strip()
-                # Xử lý chuỗi ngày (ví dụ: "12/01/2026 14:00" -> lấy "12/01/2026")
                 try:
                     date_str = text.split()[0]
                     dates.append(datetime.strptime(date_str, '%d/%m/%Y'))
                 except: pass
             
-            # Kiểm tra Tin tức (Lấy dòng đầu tiên)
+            # Kiểm tra Tin tức
             page.goto("https://qlvh.khaservice.com.vn/posts/news")
             page.wait_for_load_state("networkidle")
             loc = page.locator('//*[@id="root"]/div[2]/main/div/div/div[2]/table/tbody/tr[1]/td[8]/div')
@@ -184,7 +175,6 @@ def test_lay_thong_tin_bai_viet_ngay_cuoi(page: Page):
             if dates:
                 max_date = max(dates).strftime('%d/%m/%Y')
                 ws[f"H{idx}"] = max_date
-                print(f"   -> Ngày mới nhất: {max_date}")
             else:
                 ws[f"H{idx}"] = "N/A"
                 
@@ -205,28 +195,21 @@ def test_lay_thong_tin_bao_phi_moi_nhat(page: Page):
     for idx, project_val in enumerate(project_list, start=2):
         try:
             print(f"[{idx}] Đang lấy Fee Report: {project_val}")
-            page.locator("#combo-box-demo").click()
-            page.locator("#combo-box-demo").fill(str(project_val))
-            page.locator("#combo-box-demo-option-0").click()
+            select_project(page, project_val)
             
-            # Thay thế wait cố định bằng việc chờ dữ liệu bảng load xong
             page.goto("https://qlvh.khaservice.com.vn/fee-reports")
-            
-            # Đợi bảng dữ liệu xuất hiện (tbody)
             tbody_xpath = "//*[@id='root']/div[2]/main/div/div/div[2]/table/tbody"
             try:
                 page.wait_for_selector(f"xpath={tbody_xpath}", timeout=15000)
             except: pass
 
             loc = page.locator('xpath=//*[@id="root"]/div[2]/main/div/div/div[2]/table/tbody/tr[1]/td[5]/div')
-            # Đợi cụ thể ô dữ liệu đầu tiên hiện ra (tránh lấy nhầm lúc trang đang nạp)
             if loc.is_visible(timeout=5000):
                 text = loc.text_content().strip()
                 ws[f"I{idx}"] = text
                 print(f"   -> Phí mới nhất: {text}")
             else:
-                ws[f"I{idx}"] = "N/A (Chưa nạp)"
-                print(f"   -> Không thấy dữ liệu phí.")
+                ws[f"I{idx}"] = "N/A"
         except Exception as e:
             print(f"Lỗi Fee {project_val}: {e}")
 
@@ -236,29 +219,17 @@ def test_lay_thong_tin_bao_phi_moi_nhat(page: Page):
 def test_z_summary_report():
     excel_path = os.path.join(BASE_DIR, "data.xlsx")
     if not os.path.exists(excel_path): return
-    
-    # Đọc lại file Excel để lấy dữ liệu mới nhất
     df = pd.read_excel(excel_path, sheet_name="BaoCao")
-    
-    # Chỉ lấy 9 cột đầu tiên (từ index 0 đến 8)
     df = df.iloc[:, :9]
     
-    # --- XUẤT RA JSON ---
     json_path = os.path.join(BASE_DIR, "report.json")
-    # orient='records' giúp tạo cấu trúc mảng các object [{col1: val1, col2: val2}, ...]
     df.to_json(json_path, orient='records', force_ascii=False, indent=4)
-    print(f"   -> Đã xuất dữ liệu ra: {json_path}")
-
-    # Chuyển đổi dữ liệu thành bảng Markdown
-    table = tabulate(df, headers='keys', tablefmt='github', showindex=False)
     
+    table = tabulate(df, headers='keys', tablefmt='github', showindex=False)
     output = f"## 📊 Báo Cáo Tổng Hợp Dữ Liệu\n"
     output += f"*Thời gian cập nhật: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}*\n\n"
     output += table
-    output += "\n\n---\n💡 **Hướng dẫn:** Bôi đen bảng dữ liệu ở trên, nhấn `Ctrl+C`, sau đó mở Excel và nhấn `Ctrl+V` để dán."
-
+    
     if 'GITHUB_STEP_SUMMARY' in os.environ:
         with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as f:
             f.write(output)
-    else:
-        print("\n" + output + "\n")

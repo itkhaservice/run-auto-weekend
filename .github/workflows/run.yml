@@ -32,18 +32,25 @@ jobs:
         run: |
           pytest du_lieu_bao_cao.py
 
-      - name: Run Delete Paid Fees Script
-        if: always()
-        run: |
-          python cap_nhat_xoa_da_thanh_toan.py
-
-      - name: Commit and Push Report Data
+      - name: Push Report Data (Public JSON)
         if: always()
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add data.xlsx report.json cleanup_results.json
-          git commit -m "chore: update report and cleanup logs [skip ci]" || echo "No changes to commit"
+          git add data.xlsx report.json
+          git commit -m "chore: update report data [skip ci]" || echo "No changes to commit"
+          git push
+
+      - name: Run Delete Paid Fees & Trash Script
+        if: always()
+        run: |
+          python cap_nhat_xoa_da_thanh_toan.py
+
+      - name: Push Cleanup Logs
+        if: always()
+        run: |
+          git add cleanup_results.json
+          git commit -m "chore: update cleanup logs [skip ci]" || echo "No changes to commit"
           git push
 
       - name: Upload Log & Debug Screenshots

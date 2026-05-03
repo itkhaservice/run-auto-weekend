@@ -1,22 +1,20 @@
 [
     {
         "project_name": "CHUNG CƯ KHÁNH HỘI 1",
-        "timestamp": "26/04/2026 05:07:54",
-        "fee_reports_cleaned": [
-            "01/2026"
-        ],
+        "timestamp": "03/05/2026 05:38:35",
+        "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
             "batches": 0
         },
         "fee_trash": {
             "status": "Completed",
-            "batches": 1
+            "batches": 0
         }
     },
     {
         "project_name": "CHUNG CƯ TOPAZ HOME 2 - BLOCK B",
-        "timestamp": "26/04/2026 05:09:03",
+        "timestamp": "03/05/2026 05:39:33",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -29,7 +27,7 @@
     },
     {
         "project_name": "CHUNG CƯ TOPAZ ELITE PHOENIX 1",
-        "timestamp": "26/04/2026 05:09:26",
+        "timestamp": "03/05/2026 05:40:18",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -42,7 +40,7 @@
     },
     {
         "project_name": "CHUNG CƯ TOPAZ CITY KHỐI B",
-        "timestamp": "26/04/2026 05:09:49",
+        "timestamp": "03/05/2026 05:40:47",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -55,7 +53,7 @@
     },
     {
         "project_name": "CHUNG CƯ 4S RIVERSIDE GARDEN",
-        "timestamp": "26/04/2026 05:10:12",
+        "timestamp": "03/05/2026 05:41:16",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -68,7 +66,7 @@
     },
     {
         "project_name": "CHUNG CƯ SAMSORA RIVERSIDE",
-        "timestamp": "26/04/2026 05:10:36",
+        "timestamp": "03/05/2026 05:41:41",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -81,7 +79,7 @@
     },
     {
         "project_name": "CHUNG CƯ FLORA ANH ĐÀO",
-        "timestamp": "26/04/2026 05:10:59",
+        "timestamp": "03/05/2026 05:42:10",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -94,7 +92,7 @@
     },
     {
         "project_name": "CHUNG CƯ LÔ R7 AN KHÁNH",
-        "timestamp": "26/04/2026 05:11:22",
+        "timestamp": "03/05/2026 05:42:39",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -107,7 +105,7 @@
     },
     {
         "project_name": "CHUNG CƯ VẠN ĐÔ",
-        "timestamp": "26/04/2026 05:11:44",
+        "timestamp": "03/05/2026 05:43:02",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -120,7 +118,7 @@
     },
     {
         "project_name": "CHUNG CƯ HOÀNG ANH GIA LAI 2",
-        "timestamp": "26/04/2026 05:12:09",
+        "timestamp": "03/05/2026 05:43:31",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -133,7 +131,7 @@
     },
     {
         "project_name": "CHUNG CƯ TAM PHÚ",
-        "timestamp": "26/04/2026 05:12:32",
+        "timestamp": "03/05/2026 05:44:01",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -146,7 +144,7 @@
     },
     {
         "project_name": "CHUNG CƯ SCREC II",
-        "timestamp": "26/04/2026 05:13:15",
+        "timestamp": "03/05/2026 05:44:30",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -159,7 +157,7 @@
     },
     {
         "project_name": "CHUNG CƯ HOMYLAND 2",
-        "timestamp": "26/04/2026 05:14:57",
+        "timestamp": "03/05/2026 05:44:59",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -172,7 +170,7 @@
     },
     {
         "project_name": "CHUNG CƯ SEN HỒNG A",
-        "timestamp": "26/04/2026 05:15:35",
+        "timestamp": "03/05/2026 05:45:49",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -185,7 +183,7 @@
     },
     {
         "project_name": "CHUNG CƯ THE STAR",
-        "timestamp": "26/04/2026 05:16:02",
+        "timestamp": "03/05/2026 05:46:21",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -198,7 +196,7 @@
     },
     {
         "project_name": "CHUNG CƯ COPAC SQUARE",
-        "timestamp": "26/04/2026 05:16:30",
+        "timestamp": "03/05/2026 05:46:50",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -211,20 +209,22 @@
     },
     {
         "project_name": "CHUNG CƯ LAN PHƯƠNG MHBR",
-        "timestamp": "26/04/2026 05:16:53",
-        "fee_reports_cleaned": [],
+        "timestamp": "03/05/2026 05:47:19",
+        "fee_reports_cleaned": [
+            "02/2026"
+        ],
         "vehicle_trash": {
             "status": "Completed",
             "batches": 0
         },
         "fee_trash": {
             "status": "Completed",
-            "batches": 0
+            "batches": 1
         }
     },
     {
         "project_name": "CHUNG CƯ SAI GON METRO PARK",
-        "timestamp": "26/04/2026 05:17:49",
+        "timestamp": "03/05/2026 05:48:28",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -237,7 +237,7 @@
     },
     {
         "project_name": "CHUNG CƯ HƯNG PHÁT SILVER STAR",
-        "timestamp": "26/04/2026 05:18:27",
+        "timestamp": "03/05/2026 05:48:57",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -250,7 +250,7 @@
     },
     {
         "project_name": "CHUNG CƯ NHẤT LAN II",
-        "timestamp": "26/04/2026 05:19:00",
+        "timestamp": "03/05/2026 05:49:37",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -263,7 +263,7 @@
     },
     {
         "project_name": "CHUNG CƯ CANTAVIL PREMIER",
-        "timestamp": "26/04/2026 05:19:23",
+        "timestamp": "03/05/2026 05:50:06",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -276,7 +276,7 @@
     },
     {
         "project_name": "CHUNG CƯ FLORA KIKYO",
-        "timestamp": "26/04/2026 05:20:21",
+        "timestamp": "03/05/2026 05:51:02",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -289,7 +289,7 @@
     },
     {
         "project_name": "CHUNG CƯ PHÚ GIA",
-        "timestamp": "26/04/2026 05:21:18",
+        "timestamp": "03/05/2026 05:52:00",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -302,7 +302,7 @@
     },
     {
         "project_name": "CHUNG CƯ CITRINE APARTMENT",
-        "timestamp": "26/04/2026 05:21:41",
+        "timestamp": "03/05/2026 05:52:29",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -315,7 +315,7 @@
     },
     {
         "project_name": "CHUNG CƯ HORIZON",
-        "timestamp": "26/04/2026 05:22:04",
+        "timestamp": "03/05/2026 05:52:57",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -328,7 +328,7 @@
     },
     {
         "project_name": "CHUNG CƯ TDH - PHƯỚC LONG",
-        "timestamp": "26/04/2026 05:22:27",
+        "timestamp": "03/05/2026 05:53:25",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -341,7 +341,7 @@
     },
     {
         "project_name": "CHUNG CƯ CITIZEN.TS",
-        "timestamp": "26/04/2026 05:23:06",
+        "timestamp": "03/05/2026 05:54:10",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -349,12 +349,12 @@
         },
         "fee_trash": {
             "status": "Completed",
-            "batches": 1
+            "batches": 0
         }
     },
     {
         "project_name": "CHUNG CƯ TOPAZ ELITE PHOENIX 2",
-        "timestamp": "26/04/2026 05:24:34",
+        "timestamp": "03/05/2026 05:55:36",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -367,7 +367,7 @@
     },
     {
         "project_name": "CHUNG CƯ THE USEFUL APARTMENT",
-        "timestamp": "26/04/2026 05:25:22",
+        "timestamp": "03/05/2026 05:56:31",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",
@@ -380,7 +380,7 @@
     },
     {
         "project_name": "CHUNG CƯ HƯNG PHÁT",
-        "timestamp": "26/04/2026 05:25:46",
+        "timestamp": "03/05/2026 05:57:01",
         "fee_reports_cleaned": [],
         "vehicle_trash": {
             "status": "Completed",

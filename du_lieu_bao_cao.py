@@ -217,10 +217,40 @@ def test_z_summary_report():
     # Đọc lại file Excel để lấy dữ liệu mới nhất
     df = pd.read_excel(excel_path, sheet_name="BaoCao")
     
-    # Chuyển đổi dữ liệu thành bảng Markdown
-    # headers='keys' lấy dòng đầu tiên làm tiêu đề
+    # --- CHUẨN HÓA DỮ LIỆU CHO JSON (Khớp với reportService.js) ---
+    # Đổi tên cột từ Excel sang tên mà Website đang đọc
+    # Cấu trúc cột thực tế: ['Dự án', 'Tổng căn hộ', 'Tổng cư dân sử dụng APP', 'Tổng số căn hộ sử dụng APP', 'Tổng số cư dân', 'Tin tức', 'Thông báo', 'Ngày mới nhất']
+    
+    mapping = {
+        "Dự án": "Dự án",
+        "Tổng căn hộ": "Tổng căn hộ",
+        "Tổng cư dân sử dụng APP": "Tổng cư dân sử dụng APP",
+        "Tổng số căn hộ sử dụng APP": "Tổng số căn hộ sử dụng APP",
+        "Tin tức": "Tin tức",
+        "Thông báo": "Thông báo",
+        "Ngày mới nhất": "Ngày mới nhất"
+    }
+    
+    # Chỉ rename những cột tồn tại
+    df_json = df.rename(columns=mapping)
+    
+    # Nếu thiếu cột 'Báo phí', thêm vào với giá trị N/A (Vì trang web cần cột này)
+    if "Báo phí" not in df_json.columns:
+        # Thử tìm cột cuối cùng nếu nó là cột báo phí nhưng tên khác
+        if len(df.columns) > 8:
+            df_json["Báo phí"] = df.iloc[:, 8]
+        else:
+            df_json["Báo phí"] = "N/A"
+
+    # Chuyển đổi dữ liệu thành bảng Markdown cho GitHub Summary
     table = tabulate(df, headers='keys', tablefmt='github', showindex=False)
     
+    # --- XUẤT RA JSON ---
+    json_path = os.path.join(BASE_DIR, "report.json")
+    # Xuất toàn bộ dữ liệu (Website sẽ tự slice(1) để bỏ dòng đầu nếu cần)
+    df_json.to_json(json_path, orient='records', force_ascii=False, indent=4)
+    print(f"   -> Đã xuất báo cáo ra file: {json_path}")
+
     output = f"## 📊 Báo Cáo Tổng Hợp Dữ Liệu\n"
     output += f"*Thời gian cập nhật: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}*\n\n"
     output += table

@@ -259,6 +259,11 @@ def main_orchestrator():
         logging.info(f"Tổng số dự án cần xử lý: {len(project_list)}")
         
         for idx, project_val in enumerate(project_list, start=1):
+            # KIỂM TRA LOẠI TRỪ: Không xóa dữ liệu cho dự án Sen Hồng BC
+            if str(project_val).strip().upper() == "CHUNG CƯ SEN HỒNG BC":
+                logging.info(f"[{idx}] {Colors.RED}BỎ QUA DỰ ÁN MIỄN XÓA: {project_val}{Colors.RESET}")
+                continue
+
             # Gọi hàm xử lý riêng biệt cho từng dự án
             process_single_project(project_val, idx, start_month_str)
             

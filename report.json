@@ -1,10 +1,10 @@
 [
     {
         "Dự án":"CHUNG CƯ KHÁNH HỘI 1",
-        "Tổng căn hộ":"511",
-        "Tổng cư dân sử dụng APP":139,
-        "Tổng số căn hộ sử dụng APP":125,
-        "Tổng số cư dân":123,
+        "Tổng căn hộ":"324",
+        "Tổng cư dân sử dụng APP":3,
+        "Tổng số căn hộ sử dụng APP":2,
+        "Tổng số cư dân":2,
         "Tin tức":15,
         "Thông báo":1,
         "Ngày mới nhất":"05\/05\/2026",
@@ -370,5 +370,17 @@
         "Ngày mới nhất":"14\/04\/2026",
         "Unnamed: 8":"04\/2026",
         "Báo phí":"04\/2026"
+    },
+    {
+        "Dự án":"CHUNG CƯ RIVA PARK",
+        "Tổng căn hộ":"321",
+        "Tổng cư dân sử dụng APP":6,
+        "Tổng số căn hộ sử dụng APP":6,
+        "Tổng số cư dân":3,
+        "Tin tức":1,
+        "Thông báo":1,
+        "Ngày mới nhất":null,
+        "Unnamed: 8":"05\/2026",
+        "Báo phí":"05\/2026"
     }
 ]

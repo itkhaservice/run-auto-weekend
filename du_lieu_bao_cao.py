@@ -38,7 +38,7 @@ def login(page: Page):
     if "login" in page.url or "qlvh.khaservice.com.vn" not in page.url:
         page.goto("https://qlvh.khaservice.com.vn/login")
         page.locator("input[name='email']").fill("admin@khaservice.com.vn")
-        page.locator("input[name='password']").fill("Kha@@123")
+        page.locator("input[name='password']").fill("c@QwBU6kgNKn9He")
         page.locator("button[type='submit']").click()
         page.wait_for_timeout(2000)
 

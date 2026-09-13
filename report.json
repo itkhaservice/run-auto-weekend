@@ -1,12 +1,12 @@
 [
     {
         "Dự án":"CHUNG CƯ KHÁNH HỘI 1",
-        "Tổng căn hộ":"5",
-        "Tổng cư dân sử dụng APP":7,
-        "Tổng số căn hộ sử dụng APP":3,
-        "Tổng số cư dân":2,
-        "Tin tức":15,
-        "Thông báo":1,
+        "Tổng căn hộ":"511",
+        "Tổng cư dân sử dụng APP":139,
+        "Tổng số căn hộ sử dụng APP":124,
+        "Tổng số cư dân":124,
+        "Tin tức":1,
+        "Thông báo":28,
         "Ngày mới nhất":"05\/05\/2026",
         "Unnamed: 8":"09\/2026",
         "Báo phí":"09\/2026"
@@ -20,15 +20,15 @@
         "Tin tức":22,
         "Thông báo":20,
         "Ngày mới nhất":"29\/08\/2026",
-        "Unnamed: 8":"08\/2026",
-        "Báo phí":"08\/2026"
+        "Unnamed: 8":"09\/2026",
+        "Báo phí":"09\/2026"
     },
     {
         "Dự án":"CHUNG CƯ TOPAZ ELITE PHOENIX 1",
         "Tổng căn hộ":"621",
-        "Tổng cư dân sử dụng APP":646,
+        "Tổng cư dân sử dụng APP":643,
         "Tổng số căn hộ sử dụng APP":411,
-        "Tổng số cư dân":333,
+        "Tổng số cư dân":334,
         "Tin tức":85,
         "Thông báo":96,
         "Ngày mới nhất":"27\/08\/2026",
@@ -42,8 +42,8 @@
         "Tổng số căn hộ sử dụng APP":103,
         "Tổng số cư dân":94,
         "Tin tức":69,
-        "Thông báo":77,
-        "Ngày mới nhất":"27\/08\/2026",
+        "Thông báo":78,
+        "Ngày mới nhất":"09\/09\/2026",
         "Unnamed: 8":"09\/2026",
         "Báo phí":"09\/2026"
     },
@@ -53,9 +53,9 @@
         "Tổng cư dân sử dụng APP":21,
         "Tổng số căn hộ sử dụng APP":11,
         "Tổng số cư dân":10,
-        "Tin tức":10,
-        "Thông báo":48,
-        "Ngày mới nhất":"03\/09\/2026",
+        "Tin tức":12,
+        "Thông báo":49,
+        "Ngày mới nhất":"08\/09\/2026",
         "Unnamed: 8":"08\/2026",
         "Báo phí":"08\/2026"
     },
@@ -63,13 +63,13 @@
         "Dự án":"CHUNG CƯ SAMSORA RIVERSIDE",
         "Tổng căn hộ":"1,139",
         "Tổng cư dân sử dụng APP":492,
-        "Tổng số căn hộ sử dụng APP":224,
-        "Tổng số cư dân":233,
+        "Tổng số căn hộ sử dụng APP":225,
+        "Tổng số cư dân":234,
         "Tin tức":274,
-        "Thông báo":8,
-        "Ngày mới nhất":"04\/09\/2026",
-        "Unnamed: 8":"08\/2026",
-        "Báo phí":"08\/2026"
+        "Thông báo":9,
+        "Ngày mới nhất":"12\/09\/2026",
+        "Unnamed: 8":"09\/2026",
+        "Báo phí":"09\/2026"
     },
     {
         "Dự án":"CHUNG CƯ FLORA ANH ĐÀO",
@@ -80,15 +80,15 @@
         "Tin tức":23,
         "Thông báo":40,
         "Ngày mới nhất":"31\/07\/2026",
-        "Unnamed: 8":"08\/2026",
-        "Báo phí":"08\/2026"
+        "Unnamed: 8":"09\/2026",
+        "Báo phí":"09\/2026"
     },
     {
         "Dự án":"CHUNG CƯ LÔ R7 AN KHÁNH",
         "Tổng căn hộ":"510",
-        "Tổng cư dân sử dụng APP":47,
-        "Tổng số căn hộ sử dụng APP":21,
-        "Tổng số cư dân":20,
+        "Tổng cư dân sử dụng APP":48,
+        "Tổng số căn hộ sử dụng APP":22,
+        "Tổng số cư dân":21,
         "Tin tức":7,
         "Thông báo":24,
         "Ngày mới nhất":"04\/09\/2026",
@@ -116,8 +116,8 @@
         "Tin tức":20,
         "Thông báo":119,
         "Ngày mới nhất":"04\/09\/2026",
-        "Unnamed: 8":"08\/2026",
-        "Báo phí":"08\/2026"
+        "Unnamed: 8":"09\/2026",
+        "Báo phí":"09\/2026"
     },
     {
         "Dự án":"CHUNG CƯ TAM PHÚ",
@@ -150,8 +150,8 @@
         "Tổng số căn hộ sử dụng APP":62,
         "Tổng số cư dân":60,
         "Tin tức":37,
-        "Thông báo":73,
-        "Ngày mới nhất":"28\/08\/2026",
+        "Thông báo":74,
+        "Ngày mới nhất":"10\/09\/2026",
         "Unnamed: 8":"09\/2026",
         "Báo phí":"09\/2026"
     },
@@ -171,8 +171,8 @@
         "Dự án":"CHUNG CƯ SEN HỒNG BC",
         "Tổng căn hộ":"677",
         "Tổng cư dân sử dụng APP":203,
-        "Tổng số căn hộ sử dụng APP":131,
-        "Tổng số cư dân":133,
+        "Tổng số căn hộ sử dụng APP":132,
+        "Tổng số cư dân":134,
         "Tin tức":17,
         "Thông báo":36,
         "Ngày mới nhất":"27\/08\/2026",
@@ -186,10 +186,10 @@
         "Tổng số căn hộ sử dụng APP":58,
         "Tổng số cư dân":60,
         "Tin tức":5,
-        "Thông báo":61,
-        "Ngày mới nhất":"27\/08\/2026",
-        "Unnamed: 8":"08\/2026",
-        "Báo phí":"08\/2026"
+        "Thông báo":62,
+        "Ngày mới nhất":"12\/09\/2026",
+        "Unnamed: 8":"09\/2026",
+        "Báo phí":"09\/2026"
     },
     {
         "Dự án":"CHUNG CƯ COPAC SQUARE",
@@ -198,8 +198,8 @@
         "Tổng số căn hộ sử dụng APP":18,
         "Tổng số cư dân":21,
         "Tin tức":2,
-        "Thông báo":14,
-        "Ngày mới nhất":"29\/08\/2026",
+        "Thông báo":15,
+        "Ngày mới nhất":"07\/09\/2026",
         "Unnamed: 8":"09\/2026",
         "Báo phí":"09\/2026"
     },
@@ -212,8 +212,8 @@
         "Tin tức":15,
         "Thông báo":70,
         "Ngày mới nhất":"18\/07\/2026",
-        "Unnamed: 8":"08\/2026",
-        "Báo phí":"08\/2026"
+        "Unnamed: 8":"09\/2026",
+        "Báo phí":"09\/2026"
     },
     {
         "Dự án":"CHUNG CƯ SAI GON METRO PARK",
@@ -222,22 +222,22 @@
         "Tổng số căn hộ sử dụng APP":39,
         "Tổng số cư dân":38,
         "Tin tức":33,
-        "Thông báo":125,
-        "Ngày mới nhất":"05\/09\/2026",
+        "Thông báo":126,
+        "Ngày mới nhất":"09\/09\/2026",
         "Unnamed: 8":"09\/2026",
         "Báo phí":"09\/2026"
     },
     {
         "Dự án":"CHUNG CƯ HƯNG PHÁT SILVER STAR",
         "Tổng căn hộ":"553",
-        "Tổng cư dân sử dụng APP":146,
-        "Tổng số căn hộ sử dụng APP":56,
-        "Tổng số cư dân":55,
+        "Tổng cư dân sử dụng APP":147,
+        "Tổng số căn hộ sử dụng APP":57,
+        "Tổng số cư dân":56,
         "Tin tức":17,
         "Thông báo":14,
         "Ngày mới nhất":"28\/08\/2026",
-        "Unnamed: 8":"08\/2026",
-        "Báo phí":"08\/2026"
+        "Unnamed: 8":"09\/2026",
+        "Báo phí":"09\/2026"
     },
     {
         "Dự án":"CHUNG CƯ NHẤT LAN II",
@@ -260,8 +260,8 @@
         "Tin tức":5,
         "Thông báo":137,
         "Ngày mới nhất":"28\/04\/2026",
-        "Unnamed: 8":"07\/2026",
-        "Báo phí":"07\/2026"
+        "Unnamed: 8":"09\/2026",
+        "Báo phí":"09\/2026"
     },
     {
         "Dự án":"CHUNG CƯ FLORA KIKYO",
@@ -306,8 +306,8 @@
         "Tổng số căn hộ sử dụng APP":125,
         "Tổng số cư dân":132,
         "Tin tức":33,
-        "Thông báo":84,
-        "Ngày mới nhất":"24\/08\/2026",
+        "Thông báo":85,
+        "Ngày mới nhất":"09\/09\/2026",
         "Unnamed: 8":"09\/2026",
         "Báo phí":"09\/2026"
     },
@@ -320,8 +320,8 @@
         "Tin tức":16,
         "Thông báo":4,
         "Ngày mới nhất":"17\/12\/2025",
-        "Unnamed: 8":"07\/2026",
-        "Báo phí":"07\/2026"
+        "Unnamed: 8":"08\/2026",
+        "Báo phí":"08\/2026"
     },
     {
         "Dự án":"CHUNG CƯ CITIZEN.TS",
@@ -342,8 +342,8 @@
         "Tổng số căn hộ sử dụng APP":302,
         "Tổng số cư dân":260,
         "Tin tức":1,
-        "Thông báo":95,
-        "Ngày mới nhất":"26\/08\/2026",
+        "Thông báo":96,
+        "Ngày mới nhất":"11\/09\/2026",
         "Unnamed: 8":"09\/2026",
         "Báo phí":"09\/2026"
     },
@@ -374,12 +374,12 @@
     {
         "Dự án":"CHUNG CƯ RIVA PARK",
         "Tổng căn hộ":"332",
-        "Tổng cư dân sử dụng APP":118,
-        "Tổng số căn hộ sử dụng APP":105,
-        "Tổng số cư dân":101,
+        "Tổng cư dân sử dụng APP":119,
+        "Tổng số căn hộ sử dụng APP":106,
+        "Tổng số cư dân":102,
         "Tin tức":1,
-        "Thông báo":20,
-        "Ngày mới nhất":"28\/08\/2026",
+        "Thông báo":21,
+        "Ngày mới nhất":"13\/09\/2026",
         "Unnamed: 8":"09\/2026",
         "Báo phí":"09\/2026"
     }
